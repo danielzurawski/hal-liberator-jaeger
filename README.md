@@ -8,7 +8,7 @@ Example Jaeger distributed tracing using Liberator and HAL
 
 ## Generating traces
 
- Discovery: 
+ Discovery endpoints: 
 - http://localhost:3031/
 - http://localhost:3032/
 
@@ -16,7 +16,15 @@ Cross-service span:
 - http://localhost:3031/orders/123
 
 
-## Jaeger
+## Jaeger 
+
+- Traces http://localhost:3007/search
+
+Trace                                           |  Timeline 
+:-----------------------------------------------------:|:-------------------------:
+![Trace Example](/trace.png?raw=true "Trace Example")  |  ![Timeline Example](/timeline.png?raw=true "Timeline Example")
+
 
 - Dependencies Graph http://localhost:3007/dependencies
-- Traces http://localhost:3007/search
+ 
+![Jaeger Graph](/graph.png?raw=true "Jaeger Graph")
