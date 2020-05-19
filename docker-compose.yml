@@ -1,0 +1,47 @@
+version: '3'
+services:
+  redis:
+    image: redis
+
+  orders-service:
+    build: ./orders_service/.
+    volumes:
+      - ./orders_service/:/usr/src/app
+    ports:
+      - "3031:80"
+      - "17888:17888"
+    environment:
+      - REDIS_URL=redis://redis/1
+    depends_on:
+      - redis
+
+  items-service:
+    build: ./items_service/.
+    volumes:
+      - ./items_service/:/usr/src/app
+    ports:
+      - "3032:80"
+      - "17889:17889"
+    environment:
+      - DB_HOSTNAME=db
+    depends_on:
+      - redis
+
+  hal-jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: hal-jaeger
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    ports:
+      - "3007:16686"
+      - "9411:9411"
+      - "9410:9410"
+      - "5775:5775"
+      - "6831:6831"
+      - "6832:6832"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+    depends_on:
+      - orders-service
+      - items-service
