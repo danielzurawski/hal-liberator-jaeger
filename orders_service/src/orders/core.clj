@@ -2,7 +2,7 @@
   (:require [halboy.resource :as hal]
             [bidi.ring :refer [make-handler]]
             [hype.core :as hype]
-            [ring.util.response :as res]
+            [clj-http.client :as client]
 
             [opencensus-clojure.ring.middleware :refer [wrap-tracing]]
             [opencensus-clojure.reporting.jaeger]
