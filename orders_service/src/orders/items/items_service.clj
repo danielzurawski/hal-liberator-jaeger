@@ -1,4 +1,4 @@
-(ns orders.items_service
+(ns orders.items.items_service
   (:require [opencensus-clojure.trace :refer [span add-tag make-downstream-headers]]
             [halboy.navigator :as navigator]
             [halboy.resource :as hal]))
@@ -9,5 +9,6 @@
       (-> (navigator/discover "http://items-service/" {:headers headers})
         (assoc-in [:settings :http :headers] headers)
         (navigator/get :items)
-        (navigator/resource)))))
+        (navigator/resource)
+        (hal/resources)))))
 

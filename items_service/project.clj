@@ -14,6 +14,6 @@
                  [io.opencensus/opencensus-exporter-trace-jaeger "0.19.2"]
                  [io.opencensus/opencensus-exporter-trace-logging "0.19.2"]]
 
-  :repl-options {:init-ns items.core
+  :repl-options {:init-ns core
                  :init (go)
                  :timeout 180000})
