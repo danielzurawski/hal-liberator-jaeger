@@ -3,7 +3,8 @@
             [hype.core :as hype]
             [shared :as shared]
             [orders.items.items_service :as items]
-            [orders.db :as db]))
+            [orders.db :as db]
+            [halboy.navigator :as navigator]))
 
 
 (defn get-order-link [request routes order-id]
@@ -14,7 +15,7 @@
   (->
     (hal/new-resource (get-order-link request routes (:id order)))
     (hal/add-properties
-      :id (:io order)
+      :id (:id order)
       :name (:name order))))
 
 (defn order-liberator-hal-resource [routes]
@@ -28,15 +29,21 @@
 
     :exists?
     (fn [{:keys [order-id]}]
+      (println "1111111 TEST TEST")
       (when-let [order (get (db/get-all-orders) order-id)]
         {:order order}))
 
     :handle-ok
     (fn [{:keys [request order-id order]}]
-      (let [items-resource (items/get-items order-id)]
+      (println "22222 TEST")
+      (let [items-result (items/get-items)
+            _ (println "3333 TEST")
+            _ (println "items result" items-result)
+            items-resources (hal/get-resource (navigator/resource items-result) :items)
+            _ (println "items resources" items-resources)]
         (->
           (make-order-resource request routes order)
-          (hal/add-resources items-resource))))
+          (hal/add-resources items-resources))))
 
     :handle-not-found
     (fn [{:keys [request order-id]}]
