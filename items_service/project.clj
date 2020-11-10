@@ -10,9 +10,7 @@
                  [bidi "2.1.6"]
                  [b-social/liberator-mixin "0.0.49"]
                  [clj-http "3.10.0"]
-                 [uswitch/opencensus-clojure "0.2.84"]
-                 [io.opencensus/opencensus-exporter-trace-jaeger "0.19.2"]
-                 [io.opencensus/opencensus-exporter-trace-logging "0.19.2"]]
+                 [clj-telemetry "0.1.4"]]
 
   :repl-options {:init-ns core
                  :init (go)

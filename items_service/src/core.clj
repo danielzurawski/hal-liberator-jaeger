@@ -2,10 +2,8 @@
   (:require [bidi.ring :refer [make-handler]]
             [ring.adapter.jetty :as jetty]
 
-            [opencensus-clojure.ring.middleware :refer [wrap-tracing]]
-            [opencensus-clojure.trace :refer [configure-tracer]]
-            [opencensus-clojure.reporting.jaeger :as open-consensus-jaeger]
-            [opencensus-clojure.reporting.logging :as open-consensus-logging]
+            [telemetry.tracing :as tel-tracing]
+            [telemetry.middleware :refer [wrap-telemetry-tracing]]
 
             [discovery :as discovery]
             [items.item :as item]
@@ -26,14 +24,13 @@
 (defn go []
   (println "Starting server")
 
-  (configure-tracer {:probability 1.0})
-  (open-consensus-logging/report)
-  (open-consensus-jaeger/report "http://hal-jaeger:14268/api/traces" "items-service")
+  (tel-tracing/setup-span-processor
+    (tel-tracing/create-spans-processor-jaeger "items" "localhost" "14268"))
 
   (jetty/run-jetty
     (->
       (make-handler routes (make-resource-handlers))
-      (wrap-tracing :uri))
+      (wrap-telemetry-tracing))
     {:port 80 :join? false})
 
   (println "Server started"))
